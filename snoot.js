@@ -33,12 +33,15 @@ function setUpDays () {
 }
 
 // function to setup list of days based on the selected month
-function updateUpDays() {
+function updateDays() {
   var deliveryDay = document.getElementById("delivDy");
   var dates = deliveryDay.getElementsByTagName("option");
   var deliveryMonth = document.getElementById("delivMo");
   var deliveryYear = document.getElementById("delivYr");
   var selectedMonth = deliveryMonth.options[deliveryMonth.selectedIndex].value
+  while (dates[28]) {
+    deliveryDay.removeChild(dates[28]);
+  }
 }
 //function that set up page on load event
 function setUpPage(){
