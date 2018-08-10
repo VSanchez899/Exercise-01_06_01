@@ -12,6 +12,7 @@
 var twentyNine = document.createDocumentFragment();
 var thirthy = document.createDocumentFragment();
 var thirtyOne = document.createDocumentFragment();
+var formValidity = true;
 
 // function to remove select list defaults
 function removeSelectDefaults() {
@@ -91,6 +92,49 @@ function copyBillingAddress() {
     document.querySelector("#deliveryAddress select").selectedIndex = -1;
   }
 }
+
+//function to validate address - billing and delivery
+function validateAddress (fieldsetId) {
+  var inputElements = document.querySelectorAll("#" + fieldsetId + " input");
+  var errorDiv = document.querySelectorAll("#" + fieldsetId + " .errorMessage"[0]);
+  var fieldsetValidity = true;
+  var elementCount = inputElements.length;
+  var currentElement;
+  try {
+    alert("I am executing the try clause");
+  } catch (msg) {
+    errorDiv.style.display = "block";
+    errorDiv.innerHTML = msg;
+    formValidity = false;
+  }
+}
+//function to validate entire formValidity
+function validateForm(evt) {
+  //prevent from default behavior
+  if (evt.preventDefault) {
+    evt.preventDefault();
+  }else{
+    evt.returnValue = false;
+  }
+  formValidity = true;
+
+  validateAddress("billingAddress");
+  validateAddress("deliveryAddress");
+
+  
+
+  if (formValidity === true) { // form is valid
+    document.getElementById("errorText").innerHTML = "";
+    document.getElementById("errorText").style.display = "none";
+    document.getElementsByTagName("form")[0].submit();
+
+  }else{
+    document.getElementById("errorText").innerHTML = "Please fix the indicated problems and then resubmit your order.";
+    document.getElementById("errorText").style.display = "block";
+    scroll(0,0);
+  }
+}
+
 //function that set up page on load event
 function setUpPage(){
   removeSelectDefaults();
@@ -127,6 +171,13 @@ function createEventListeners(){
     same.addEventListener("change", copyBillingAddress, false);
   }else if (same.attachEvent) {
     same.attachEvent("onchange", copyBillingAddress, false);
+  }
+
+  var form = document.getElementsByTagName("form")[0];
+  if (same.addEventListener) {
+    form.addEventListener("submit", validateForm, false);
+  }else if (same.attachEvent) {
+    form.attachEvent("onsubmit", validateForm, false);
   }
 }
 //page load event handlers
