@@ -115,6 +115,15 @@ function validateAddress (fieldsetId) {
         currentElement.style.background = "white";
       }
     }
+    //validate select list field
+    currentElement = document.querySelectorAll("#" + fieldsetId + " select")[0];
+    if (currentElement.selectedIndex === -1){
+      currentElement.style.border = "1px solid red";
+      fieldsetValidity = false;
+    }
+    else{
+      currentElement.style.border = "";
+    }
     //action for invalid fieldset
     if (fieldsetValidity === false) {
       if (fieldsetValidity === "billingAddress") {
@@ -123,6 +132,10 @@ function validateAddress (fieldsetId) {
       else{
         throw "Please complete all delivery address information"
       }
+    }
+    else{
+      errorDiv.style.display = "none";
+      errorDiv.innerHTML = "";
     }
   } catch (msg) {
     errorDiv.style.display = "block";
