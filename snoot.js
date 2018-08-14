@@ -39,6 +39,10 @@ function updateDays() {
   var dates = deliveryDay.getElementsByTagName("option");
   var deliveryMonth = document.getElementById("delivMo");
   var deliveryYear = document.getElementById("delivYr");
+  //cover for no month selected
+  if (deliveryMonth.selectedIndex === -1) {
+    return;
+  }
   var selectedMonth = deliveryMonth.options[deliveryMonth.selectedIndex].value
   while (dates[28]) {
     deliveryDay.removeChild(dates[28]);
@@ -143,6 +147,87 @@ function validateAddress (fieldsetId) {
     formValidity = false;
   }
 }
+//function to validate delivery date
+function validateDeliveryDate () {
+  var selectElements = document.querySelectorAll("#deliveryDate" + " select");
+  var errorDiv = document.querySelectorAll("#deliveryDate" + " .errorMessage")[0];
+  var fieldsetValidity = true;
+  var elementCount = selectElements.length;
+  var currentElement;
+  try {
+    //loop through select fields looking for blanks
+    for (var i = 0; i < elementCount; i++) {
+      currentElement = selectElements[i];
+      //blanks
+      //not blanks
+      if (currentElement.selectedIndex === -1) {
+        currentElement.style.border = "1px solid red";
+        fieldsetValidity = false;
+      }
+      //not blanks
+      else{
+        currentElement.style.border = "";
+      }
+    }
+    
+    //action for invalid fieldset
+    if (fieldsetValidity == false) {
+      throw "Please specify a delivery date";
+    }
+    else{
+      errorDiv.style.display = "none";
+      errorDiv.innerHTML = "";
+    }
+  } catch (msg) {
+    errorDiv.style.display = "block";
+    errorDiv.innerHTML = msg;
+    formValidity = false;
+  }
+}
+
+//function to validate delivery date
+function validatePayment () {
+  var errorDiv = document.querySelectorAll("#deliveryDate" + " .errorMessage")[0];
+  var fieldsetValidity = true;
+  var ccNumElement = document.getElementById("ccNum")
+  var selectElements = document.querySelectorAll("#paymentInfo" + " select");
+  var elementCount = selectElements.length;
+  var cvvElement = document.getElementById("cvv")
+  var cards = document.getElementsByName("PaymentType");
+  var currentElement;
+  //this is where we were yesterday
+  try {
+    //loop through select fields looking for blanks
+    for (var i = 0; i < elementCount; i++) {
+      currentElement = selectElements[i];
+      //blanks
+      //not blanks
+      if (currentElement.selectedIndex === -1) {
+        currentElement.style.border = "1px solid red";
+        fieldsetValidity = false;
+      }
+      //not blanks
+      else{
+        currentElement.style.border = "";
+      }
+    }
+    
+    //action for invalid fieldset
+    if (fieldsetValidity == false) {
+      throw "Please specify a delivery date";
+    }
+    else{
+      errorDiv.style.display = "none";
+      errorDiv.innerHTML = "";
+    }
+  } catch (msg) {
+    errorDiv.style.display = "block";
+    errorDiv.innerHTML = msg;
+    formValidity = false;
+  }
+}
+
+
 //function to validate entire formValidity
 function validateForm(evt) {
   //prevent from default behavior
@@ -155,6 +240,7 @@ function validateForm(evt) {
 
   validateAddress("billingAddress");
   validateAddress("deliveryAddress");
+  validateDeliveryDate();
 
   
 
