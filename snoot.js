@@ -263,6 +263,7 @@ function validateForm(evt) {
   validateDeliveryDate();
   validatePayment();
   validateMessage();
+  validateCreateAccount();
 
 
 
@@ -306,6 +307,56 @@ function validateMessage() {
     errorDiv.innerHTML = msg;
     msgBox.style.background = "rgb(255,233,233)";
     formValidity = false;
+  }
+}
+
+//function to validate create account
+function validateCreateAccount() {
+  var errorDiv = document.querySelectorAll("#createAccount" + " .errorMessage")[0];
+  var usernameElement = document.getElementById("username");
+  var pass1Element = document.getElementById("pass1");
+  var pass2Element = document.getElementById("pass2");
+  var invColor = "rgb(255,233,233)";
+  var passwordMismatch = false;
+  var fieldsetValidity = true;
+  usernameElement.style.background = "white";
+  pass1Element.style.background = "white";
+  pass2Element.style.background = "white";
+  errorDiv.style.display = "";
+  errorDiv.innerHTML = "";
+
+  try {
+    if (usernameElement.value !== "" && pass1Element.value !== "" && pass2Element.value !== "") {
+      // one or more fields has data
+      if (pass1Element.value !== pass2Element.value) { 
+        //verify passwords match
+        fieldsetValidity = false;
+        passwordMismatch = true;
+        throw "Passwords entered do not match, Please re-enter."
+
+      }
+    }
+    else if (usernameElement.value === "" && pass1Element === "" && pass2Element === "") {
+      // no fields have data
+      fieldsetValidity = true;
+      passwordMismatch = false;
+     }
+     else{
+       fieldsetValidity = false;
+       throw "Please enter all fields to create account.";
+     }
+  } catch (msg) {
+    errorDiv.style.display = "block";
+    errorDiv.innerHTML = msg;
+    pass1Element.style.background = invColor;
+    pass2Element.style.background = invColor;
+    formValidity = false;
+    if (passwordMismatch) {
+      usernameElement.style.background = "white";
+    }
+    else{
+      usernameElement.style.background = invColor;
+    }
   }
 }
 
